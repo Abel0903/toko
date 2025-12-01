@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokoPro - Platform Penjualan Terpercaya</title>
+    <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header>
+        <nav>
+            <a href="/" class="logo">TokoPro</a>
+            <ul class="nav-links">
+                <li><a href="/">Beranda</a></li>
+                <li><a href="/products.html">Produk</a></li>
+                <li><a href="/about.html">Tentang</a></li>
+                <li><a href="/contact.html">Kontak</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <button class="btn btn-secondary" onclick="goToCart()">
+                    🛒 <span id="cart-count">0</span>
+                </button>
+                <button class="btn btn-secondary" id="auth-btn" onclick="toggleAuthMenu()">Login</button>
+                <div id="auth-menu" style="display: none; position: absolute; top: 60px; right: 10px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 50; min-width: 200px;">
+                    <button onclick="goToProfile()" class="auth-menu-item">👤 Profil Saya</button>
+                    <button onclick="goToOrders()" class="auth-menu-item">📦 Pesanan Saya</button>
+                    <div style="border-top: 1px solid #e5e7eb;"></div>
+                    <button onclick="logout()" class="auth-menu-item" style="color: #dc2626;">Logout</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Belanja Produk Berkualitas</h1>
+            <p>Ribuan produk pilihan dengan harga terbaik dan pengiriman cepat</p>
+            <a href="/products.html" class="btn btn-lg" style="background: white; color: #2563eb; margin-top: 1rem;">Mulai Belanja Sekarang</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container" style="margin-bottom: 3rem;">
+        <!-- Promo Banner -->
+        <div style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); padding: 2rem; border-radius: 0.75rem; color: white; margin-bottom: 3rem; text-align: center;">
+            <h3 style="margin: 0; font-size: 1.5rem;">🎉 Diskon Spesial Hingga 50%</h3>
+            <p style="margin: 0.5rem 0; opacity: 0.9;">Gratis ongkir untuk pembelian di atas Rp 100.000</p>
+        </div>
+
+        <!-- Featured Products -->
+        <div>
+            <h2 style="margin-bottom: 2rem; font-size: 2rem;">Produk Unggulan</h2>
+            <div class="products-grid" id="featured-products">
+                <div class="card" style="padding: 2rem; text-align: center;">
+                    <div class="spinner"></div>
+                    <p>Memuat produk...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Choose Us -->
+        <div style="margin-top: 4rem; background: white; padding: 3rem; border-radius: 0.75rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 1.75rem;">Mengapa Pilih Kami?</h2>
+            <div class="flex" style="gap: 2rem; flex-wrap: wrap; justify-content: space-around;">
+                <div style="text-align: center; flex: 1; min-width: 200px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">✅</div>
+                    <h3>Produk Berkualitas</h3>
+                    <p style="color: #6b7280;">Semua produk sudah melalui quality control ketat</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 200px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚚</div>
+                    <h3>Pengiriman Cepat</h3>
+                    <p style="color: #6b7280;">Gratis ongkir & pengiriman dalam 1-2 hari</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 200px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">💰</div>
+                    <h3>Harga Terjangkau</h3>
+                    <p style="color: #6b7280;">Harga kompetitif dengan promo menarik setiap hari</p>
+                </div>
+                <div style="text-align: center; flex: 1; min-width: 200px;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔒</div>
+                    <h3>Aman & Terpercaya</h3>
+                    <p style="color: #6b7280;">Pembayaran aman dan garansi uang kembali 100%</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #1f2937; color: white; padding: 2rem; margin-top: 3rem; text-align: center;">
+        <div class="container">
+            <p>&copy; 2024 TokoPro. Semua hak dilindungi. Dibuat dengan ❤️ untuk Anda.</p>
+        </div>
+    </footer>
+
+    <script src="assets/api.js"></script>
+    <script>
+        // Update cart count
+        function updateCartCount() {
+            const count = cartAPI.getItemCount();
+            document.getElementById('cart-count').textContent = count;
+        }
+
+        // Navigation functions
+        function goToCart() {
+            window.location.href = '/cart.html';
+        }
+
+        function goToProfile() {
+            if (authAPI.isLoggedIn()) {
+                window.location.href = '/profile.html';
+            } else {
+                showAlert('Silakan login terlebih dahulu', 'warning');
+                window.location.href = '/login.html';
+            }
+        }
+
+        function goToOrders() {
+            if (authAPI.isLoggedIn()) {
+                window.location.href = '/orders.html';
+            } else {
+                showAlert('Silakan login terlebih dahulu', 'warning');
+                window.location.href = '/login.html';
+            }
+        }
+
+        function toggleAuthMenu() {
+            const menu = document.getElementById('auth-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function logout() {
+            authAPI.logout();
+        }
+
+        function showAlert(message, type = 'info') {
+            alert(message);
+        }
+
+        // Load featured products
+        async function loadFeaturedProducts() {
+            try {
+                const data = await productAPI.getAll();
+                const products = data.data || [];
+                
+                const featured = products.slice(0, 4);
+                const html = featured.map(product => `
+                    <div class="product-card">
+                        <div class="product-image">
+                            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                📦
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-description">${product.description || 'Produk pilihan berkualitas'}</div>
+                            <div class="product-price">${formatCurrency(product.price)}</div>
+                            <div class="product-stock ${product.stock > 10 ? '' : product.stock > 0 ? 'low' : 'out'}">
+                                Stock: ${product.stock} unit
+                            </div>
+                            <div class="product-actions">
+                                <button class="btn btn-primary" onclick="addToCart(${product.id}, '${product.name}', ${product.price}, ${product.stock})">Tambah Keranjang</button>
+                                <button class="btn btn-secondary" onclick="viewProduct(${product.id})">Lihat Detail</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('featured-products').innerHTML = html;
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('featured-products').innerHTML = '<div class="card">Gagal memuat produk</div>';
+            }
+        }
+
+        function addToCart(id, name, price, stock) {
+            if (stock <= 0) {
+                showAlert('Produk sedang habis', 'danger');
+                return;
+            }
+            cartAPI.addToCart({ id, name, price, stock });
+            updateCartCount();
+            showAlert('Produk ditambahkan ke keranjang', 'success');
+        }
+
+        function viewProduct(id) {
+            window.location.href = `/product-detail.html?id=${id}`;
+        }
+
+        // Update auth button
+        function updateAuthButton() {
+            const btn = document.getElementById('auth-btn');
+            if (authAPI.isLoggedIn()) {
+                const user = authAPI.getCurrentUser();
+                btn.textContent = `👤 ${user?.name || 'Profil'}`;
+            } else {
+                btn.textContent = 'Login';
+                btn.onclick = () => window.location.href = '/login.html';
+            }
+        }
+
+        // Initialize
+        updateAuthButton();
+        updateCartCount();
+        loadFeaturedProducts();
+
+        // Update every 30 seconds
+        setInterval(loadFeaturedProducts, 30000);
+    </script>
+</body>
+</html>
